@@ -1,8 +1,8 @@
 import pandas as pd
 import re
 
-RAW_PATH = "cars.csv"
-CLEANED_DATA_PATH = "cleaned_cars.csv"
+RAW_PATH = "data/cars.csv"
+CLEANED_DATA_PATH = "data/cleaned_cars.csv"
 
 def drop_unwanted_columns(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()

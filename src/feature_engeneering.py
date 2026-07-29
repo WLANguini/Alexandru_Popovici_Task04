@@ -1,7 +1,8 @@
 import pandas as pd
+import numpy as np
 
-CLEANED_DATA_PATH = "cleaned_cars.csv"
-FEATURES_DATA_PATH = "features_data.csv"
+CLEANED_DATA_PATH = "data/cleaned_cars.csv"
+FEATURES_DATA_PATH = "data/features_data.csv"
 
 
 
@@ -16,6 +17,7 @@ def add_mileage_per_year (df: pd.DataFrame) -> pd.DataFrame:
     
     df = df.copy()
     df["mileage_per_year"] = (df["mileage_kilometers"] / df["car_age"]).round(2)
+    df["mileage_per_year"] = (df["mileage_per_year"].replace([np.inf, -np.inf], 0))
     
     return df
 
@@ -57,5 +59,5 @@ def main() -> None:
 if __name__ == "__main__":
     main()
 
-    
+
 

@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 
-FEATURE_PATH = "features_data.csv"
+FEATURE_PATH = "data/features_data.csv"
 df = pd.read_csv(FEATURE_PATH)
 
 TARGET_COLUMN = "priceusd"
