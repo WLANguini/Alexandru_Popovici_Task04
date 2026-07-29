@@ -5,6 +5,8 @@ from sklearn.model_selection import train_test_split
 import joblib
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
+os.makedirs("model", exist_ok=True)
+
 DATA_PATH = "data/features_data.csv"
 MODEL_PATH = "models/"
 CHOSEN_MODEL_PATH = "model/car_price_model.joblib"
@@ -63,7 +65,7 @@ df_results["Placement"] = (
 
 # Deoarece git push nu functioneaza cu modelele din cauza faptului ca acestea au peste 300MB am hotarat sa fac un gitignore pentru a putea continua
 
-best_model_name = df_results.iloc[0]["Model"]
+best_model_name = df_results.loc[df_results["Placement"] == 1, "Model"].iloc[0]
 
 best_model_path = f"{MODEL_PATH}/{best_model_name}"
 

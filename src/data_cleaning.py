@@ -106,7 +106,6 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
     df_clean = (
         df
         .drop_duplicates()
-        .dropna()
         .pipe(standardize_column_names)
         .pipe(strip_string_values)
         .pipe(replace_missing_like_values)
@@ -114,6 +113,7 @@ def clean(df: pd.DataFrame) -> pd.DataFrame:
         .pipe(drop_unwanted_columns)
         .pipe(filter_mileage_outliers)
         .reset_index(drop=True)
+        .dropna(subset="")
     )
  
     return df_clean 

@@ -6,7 +6,7 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.compose import ColumnTransformer
 
 FEATURE_PATH = "data/features_data.csv"
-df = pd.read_csv(FEATURE_PATH)
+
 
 TARGET_COLUMN = "priceusd"
 
@@ -39,7 +39,7 @@ def split_features_and_target(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series
  
     return X, Y
 
-X, Y = split_features_and_target(df)
+
 
 def build_numeric_transformer() -> Pipeline:
  
