@@ -3,24 +3,19 @@ import re
 
 RAW_PATH = "data/cars.csv"
 CLEANED_DATA_PATH = "data/cleaned_cars.csv"
-df = pd.read_csv(RAW_PATH)
-print(df)
-df = df.drop_duplicates()
 
-df = df.dropna()
+def drop_unwanted_columns(df: pd.DataFrame) -> pd.DataFrame:
+    df = df.copy()
+    df = df.drop(columns=["color"], errors="ignore")
+    return df
 
-df = df.drop(columns= "color")
-print(df.info())
-
-max_year = 2019
-
-df["car_age"] = max_year - df["year"]
-df["km_per_year"] = df["mileage(kilometers)"] / df["car_age"].clip(lower=1)
-cars_under_true_mileage = df[df["km_per_year"] < 100]
-df = df.drop(cars_under_true_mileage.index)
-cars_over_true_mileage = df[df["km_per_year"] > 100000]
-df = df.drop(cars_over_true_mileage.index)
-df = df.drop(columns=["car_age", "km_per_year"])
+def filter_mileage_outliers(df: pd.DataFrame, max_year: int = 2019) -> pd.DataFrame:
+    df = df.copy()
+    df["car_age"] = max_year - df["year"]
+    df["km_per_year"] = df["mileage_kilometers"] / df["car_age"].clip(lower=1)
+    df = df[(df["km_per_year"] >= 100) & (df["km_per_year"] <= 100000)]
+    df = df.drop(columns=["car_age", "km_per_year"])
+    return df
 
 def standardize_column_names(df: pd.DataFrame) -> pd.DataFrame:
  
@@ -105,22 +100,19 @@ def clean_categorical_values(df: pd.DataFrame) -> pd.DataFrame:
     
     return df
 
-def remove_rows_with_missing_target(df: pd.DataFrame) -> pd.DataFrame:
- 
-    df = df.copy()
-
- 
-    return df
 
 def clean(df: pd.DataFrame) -> pd.DataFrame:
  
     df_clean = (
         df
+        .drop_duplicates()
+        .dropna()
         .pipe(standardize_column_names)
         .pipe(strip_string_values)
         .pipe(replace_missing_like_values)
         .pipe(clean_categorical_values)
-        .pipe(remove_rows_with_missing_target)
+        .pipe(drop_unwanted_columns)
+        .pipe(filter_mileage_outliers)
         .reset_index(drop=True)
     )
  
@@ -141,6 +133,7 @@ def main() -> None:
     df_cleaned.to_csv(CLEANED_DATA_PATH, index=False)
  
     print(f"Cleaned dataset saved to: {CLEANED_DATA_PATH}")
+    print(df_cleaned.isna().sum())
 
 
 if __name__ == "__main__":
