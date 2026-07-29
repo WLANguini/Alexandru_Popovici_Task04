@@ -7,7 +7,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 DATA_PATH = "data/features_data.csv"
 MODEL_PATH = "models/"
-CHOSEN_MODEL_PATH = "best_model/"
+CHOSEN_MODEL_PATH = "model/car_price_model.joblib"
 
 df = pd.read_csv(DATA_PATH)
 
@@ -61,7 +61,25 @@ df_results["Placement"] = (
     .astype(int)
 )
 
+# Deoarece git push nu functioneaza cu modelele din cauza faptului ca acestea au peste 300MB am hotarat sa fac un gitignore pentru a putea continua
+
+best_model_name = df_results.iloc[0]["Model"]
+
+best_model_path = f"{MODEL_PATH}/{best_model_name}"
+
+best_model = joblib.load(best_model_path)
+
+joblib.dump(
+    best_model,
+    f"{CHOSEN_MODEL_PATH}"
+)
 
 
+print(
+    f"\nCel mai bun model este: {best_model_name}"
+)
+print(
+    "Model salvat în best_model/best_car_price_model.joblib"
+)
 
 
