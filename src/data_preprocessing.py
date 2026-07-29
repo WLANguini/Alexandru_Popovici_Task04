@@ -2,6 +2,8 @@ import pandas as pd
 from sklearn.pipeline import Pipeline
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import StandardScaler
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.compose import ColumnTransformer
 
 FEATURE_PATH = "features_data.csv"
 df = pd.read_csv(FEATURE_PATH)
@@ -39,7 +41,7 @@ def split_features_and_target(df: pd.DataFrame) -> tuple[pd.DataFrame, pd.Series
 
 X, Y = split_features_and_target(df)
 
-def _build_numeric_transformer() -> Pipeline:
+def build_numeric_transformer() -> Pipeline:
  
     numeric_transformer = Pipeline(
         steps=[
@@ -50,4 +52,26 @@ def _build_numeric_transformer() -> Pipeline:
  
     return numeric_transformer
     
+def build_categorical_transformer() -> Pipeline:
+ 
+    categorical_transformer = Pipeline(
+        steps=[
+            ("imputer", SimpleImputer(missing_values=pd.NA, strategy="most_frequent")),
+            ("encoder", OneHotEncoder(handle_unknown="ignore", sparse_output=False)),
+        ]
+    )
+ 
+    return categorical_transformer
+
+def build_preprocessor() -> ColumnTransformer:
+ 
+    preprocessor = ColumnTransformer(
+        transformers=[
+            ("num", build_numeric_transformer(), NUMERIC_FEATURES),
+            ("cat", build_categorical_transformer(), CATEGORICAL_FEATURES)
+        ],
+        remainder="drop"
+    )
+ 
+    return preprocessor
     
