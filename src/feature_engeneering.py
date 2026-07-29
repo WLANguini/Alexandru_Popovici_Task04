@@ -1,7 +1,7 @@
 import pandas as pd
 
-CLEANED_DATA_PATH = "data\\cleaned_cars.csv"
-FEATURES_DATA_PATH = "data\\features_data.csv"
+CLEANED_DATA_PATH = "cleaned_cars.csv"
+FEATURES_DATA_PATH = "features_data.csv"
 
 
 
