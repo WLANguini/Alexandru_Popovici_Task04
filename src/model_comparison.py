@@ -7,6 +7,7 @@ from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 
 DATA_PATH = "data/features_data.csv"
 MODEL_PATH = "models/"
+CHOSEN_MODEL_PATH = "best_model/"
 
 df = pd.read_csv(DATA_PATH)
 
@@ -48,7 +49,18 @@ for file in os.listdir(MODEL_PATH):
     
     print(f"Modelul {file}, a obtinut urmatoarele scoruri:\n Mean absolute error: {mae}\n Mean squared error: {mse}\n RMSE: {rmse}\n R2 Score: {r2}")
 
-print(df_results.round(2))
+
+df_results["Score"] = (
+    df_results["R2"] 
+    - df_results["RMSE"] / df_results["RMSE"].max()
+)
+
+df_results["Placement"] = (
+    df_results["Score"]
+    .rank(method="dense", ascending=False)
+    .astype(int)
+)
+
 
 
 
